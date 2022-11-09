@@ -15,85 +15,87 @@ import PatientView from '/src/views/PatientView.vue'
 import { ROUTES } from './names'
 
 import goTo from 'vuetify/lib/services/goto'
+import { specialistGuard } from './guards';
 
 Vue.use(VueRouter)
 
 const routes = [
-  /**
-   * Main Pages
+    /**
+     * Main Pages
+     */
+    {
+        path: '/',
+        component: MainLayout,
+        children: [
+            {
+                path: '',
+                name: ROUTES.HOME,
+                component: HomeView
+            },
+        ]
+    },
+
+    /**
+   * Authentication Pages
    */
-  {
-    path: '/',
-    component: MainLayout,
-    children: [
-      {
-        path: '',
-        name: ROUTES.HOME,
-        component: HomeView
-      },
-    ]
-  },
+    {
+        path: '/login',
+        component: AuthLayout,
+        children: [
+            {
 
-  /**
- * Authentication Pages
- */
-  {
-    path: '/login',
-    component: AuthLayout,
-    children: [
-      {
+                path: '',
+                name: ROUTES.LOGIN,
+                component: LoginView
+            },
+            {
+                path: '/register',
+                name: ROUTES.REGISTER,
+                component: RegisterView
+            }
+        ]
+    },
 
-        path: '',
-        name: ROUTES.LOGIN,
-        component: LoginView
-      },
-      {
-        path: '/register',
-        name: ROUTES.REGISTER,
-        component: RegisterView
-      }
-    ]
-  },
-
-  /**
-   * Patients Pages
-   */
-  {
-    path: '/patients',
-    component: PatientLayout,
-    children: [
-      {
-        path: '',
-        name: ROUTES.PATIENT_LIST,
-        component: PatientListView
-      },
-      {
-        path: ':id',
-        name: ROUTES.PATIENT,
-        component: PatientView
-      }
-    ]
-  },
+    /**
+     * Patients Pages
+     */
+    {
+        path: '/patients',
+        component: PatientLayout,
+        beforeEnter: specialistGuard,
+        children: [
+            {
+                path: '',
+                name: ROUTES.PATIENT_LIST,
+                component: PatientListView
+            },
+            {
+                path: ':id',
+                name: ROUTES.PATIENT,
+                component: PatientView
+            }
+        ]
+    },
 
 ]
 
 const router = new VueRouter({
-  routes,
-  /**
-   * Programmatic scrolling
-   */
-  scrollBehavior: (to, from, savedPosition) => {
-    let scrollTo = 0
+    routes,
+    /**
+     * Programmatic scrolling
+     */
+    scrollBehavior: (to, from, savedPosition) => {
+        let scrollTo = 0
 
-    if (to.hash) {
-      scrollTo = to.hash
-    } else if (savedPosition) {
-      scrollTo = savedPosition.y
-    }
+        if (to.hash) {
+            scrollTo = to.hash
+        } else if (savedPosition) {
+            scrollTo = savedPosition.y
+        }
 
-    return goTo(scrollTo)
-  },
-  base: process.env.BASE_URL,
+        return goTo(scrollTo)
+    },
+    base: process.env.BASE_URL,
 })
 
 export default router
