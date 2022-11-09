@@ -1,0 +1,29 @@
+/** 
+ * Vuetify Buttons
+**/
+.v-btn .v-btn__content{
+  text-transform: none;
+}
+
+
+/** 
+ * Vuetify Tabs
+**/
+.v-tabs .v-tabs-bar .v-tab{
+  text-transform: none;
+}
+
+
+/**
+* Class
+**/
+.position-fixed {
+  position: fixed;
+}
+
+/**
+* List
+**/
+ul {
+  list-style: none;
+}
